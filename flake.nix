@@ -14,23 +14,19 @@
           packages = with pkgs; [
             cmake
             gnumake
-            # gcc
             gdb
-            pkg-config
-            boost
-            # googletest
             
             clang
             cppcheck
 
             lefthook
+            go-task
             typos
           ];
 
           shellHook = ''
             echo "Compiler: $(g++ --version | head -n1)"
-            alias run="lefthook run"
-            echo "Aliased 'lefthook run' to 'run'"
+            task --list
           '';
         };
       }
