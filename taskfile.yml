@@ -1,5 +1,20 @@
 version: "3"
 
+vars:
+  BUILD_DIR: "build"
+  EXE_NAME:
+    sh: |
+      RAW=$(grep "OUTPUT_NAME" CMakeLists.txt | tail -n1 | sed -E 's/.*OUTPUT_NAME\s+//; s/[")]//g; s/\)//g; s/\s+$//')
+      if [[ "$RAW" =~ \$\{([^}]+)\} ]]; then
+        VAR_NAME="${BASH_REMATCH[1]}"
+        VALUE=$(grep -E "set\s*\(\s*$VAR_NAME" CMakeLists.txt | head -n1 | sed -E "s/.*$VAR_NAME\s+//; s/[)\"]//g; s/\s+$//")
+        if [ -z "$VALUE" ] && [ "$VAR_NAME" = "PROJECT_NAME" ]; then
+          VALUE=$(grep -i "project(" CMakeLists.txt | head -n1 | sed -E 's/project\s*\(\s*([[:alnum:]_]+).*/\1/')
+        fi
+        echo "$RAW" | sed "s/\${$VAR_NAME}/$VALUE/g"
+      else
+        echo "$RAW"
+      fi | tr -d '\n\r '
 tasks:
   default:
     cmds:
@@ -16,16 +31,10 @@ tasks:
     desc: Check if all the dependencies are present.
     cmds:
       - |
-        command -v lefthook >/dev/null || echo "missing lefthook"
-      - |
-        command -v typos >/dev/null || echo "missing typos"
-      - |
-        command -v clang-format >/dev/null || echo "missing clang-format, try installing llvm"
-      - |
-        command -v cmake >/dev/null || echo "missing CMAKE"
-      - |
-        command -v make >/dev/null || echo "missing MAKE"
-
+        tools="lefthook typos clang-format cmake make"
+        for tool in $tools; do
+            command -v $tool >/dev/null || echo "missing $tool"
+        done;
 
   nix:
     desc: Enter the nix dev shell.
@@ -33,6 +42,12 @@ tasks:
       - |
         nix --extra-experimental-features nix-command --extra-experimental-features flakes develop
   
+
+  test:
+    desc: Run the project tests using ctest
+    cmds:
+      - | 
+        ctest --test-dir {{.BUILD_DIR}} --output-on-failure {{.CLI_ARGS}}
 
   build:
     desc: Configure and build the project. 
@@ -57,19 +72,18 @@ tasks:
           rm -fr build .cache;
         fi
       
-        cmake -S . -B build \
+        cmake -S . -B {{.BUILD_DIR}} \
             -DCMAKE_BUILD_TYPE=${DEBUG_VAL} \
             -DBUILD_CLI=${CLI_VAL} \
             -DBUILD_TESTING=${TEST_VAL}
-        cmake --build build --parallel
+        cmake --build {{.BUILD_DIR}} --parallel
         rm -f compile_commands.json
-        cp build/compile_commands.json compile_commands.json
+        cp {{.BUILD_DIR}}/compile_commands.json compile_commands.json
 
   run:
-    deps: [build]
     desc: Run the generated mapgen binary
     cmds:
-      - ./build/mapgen
+      - "{{.BUILD_DIR}}/{{.EXE_NAME}} {{.CLI_ARGS}}"
 
   commit-msg:
     desc: Validate commit message format (used by git hooks)
@@ -78,9 +92,9 @@ tasks:
         MSG_FILE="{{.CLI_ARGS}}"
         [ -f "$MSG_FILE" ] || { echo "Usage: task commit-msg -- <file>"; exit 1; }
         TITLE=$(head -n1 "$MSG_FILE")
-        [[ ${#TITLE} -le 100 ]] || { echo "❌ Title too long"; exit 1; }
+        [[ ${#TITLE} -le 100 ]] || { echo "Title too long"; exit 1; }
         echo "$TITLE" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore)(\(.*\))?(!)?: .+$' || {
-          echo "❌ Invalid format. Expected: type(scope): message"
+          echo "Invalid format. Expected: type(scope): message"
           exit 1
         }
 
@@ -151,4 +165,3 @@ tasks:
              echo "❌ $file: Missing #endif" && exit 1
           fi
         done
-

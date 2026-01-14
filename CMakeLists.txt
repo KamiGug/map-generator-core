@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.27.0)
+cmake_minimum_required(VERSION 3.27...3.31)
 
 project(MapGenerator 
     VERSION 0.0.1 
@@ -11,7 +11,6 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 option(BUILD_TESTING "Build the testing tree" ON)
 option(BUILD_CLI "Build the command line interface" OFF)
-
 
 include(FetchContent)
 
@@ -34,18 +33,25 @@ target_include_directories(${PROJECT_NAME} PUBLIC
 )
 
 if(BUILD_CLI)
-    file(GLOB_RECURSE CLI_SOURCES CONFIGURE_DEPENDS "cli/*.cpp")
     FetchContent_Declare(
-     	cli11 
-      URL https://github.com/CLIUtils/CLI11/archive/refs/tags/v2.4.1.tar.gz
+        cli11 
+        URL https://github.com/CLIUtils/CLI11/archive/refs/tags/v2.4.1.tar.gz
     )
-    FetchContent_MakeAvailable(cli11)
+    
+    FetchContent_Declare(
+        json
+        URL https://github.com/nlohmann/json/releases/download/v3.11.3/json.tar.xz
+    )
+    
+    FetchContent_MakeAvailable(cli11 json)
 
+    file(GLOB_RECURSE CLI_SOURCES CONFIGURE_DEPENDS "cli/*.cpp")
     add_executable(${PROJECT_NAME}_cli ${CLI_SOURCES})
     
     target_link_libraries(${PROJECT_NAME}_cli PRIVATE 
         ${PROJECT_NAME}::${PROJECT_NAME} 
         CLI11::CLI11
+        nlohmann_json::nlohmann_json
     )
 
     set_target_properties(${PROJECT_NAME}_cli PROPERTIES
@@ -64,12 +70,9 @@ if(PROJECT_IS_TOP_LEVEL AND BUILD_TESTING)
     )
     FetchContent_MakeAvailable(googletest)
 
-    # Modern GTest strategy: Single test runner for efficiency
     file(GLOB_RECURSE TEST_SOURCES CONFIGURE_DEPENDS "tests/*.cpp" "tests/*.c")
-    
     add_executable(${PROJECT_NAME}_tests ${TEST_SOURCES})
     
-    # NOTE: Link against GTest::gtest_main so you don't have to write main() in your tests
     target_link_libraries(${PROJECT_NAME}_tests PRIVATE 
         ${PROJECT_NAME}::${PROJECT_NAME} 
         GTest::gtest_main

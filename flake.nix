@@ -27,6 +27,7 @@
           shellHook = ''
             echo "Compiler: $(g++ --version | head -n1)"
             task --list
+            alias task='task -s'
           '';
         };
       }
