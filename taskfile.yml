@@ -22,7 +22,7 @@ tasks:
 
   install:
     desc: Fresh after pull configuration.
-    deps: 
+    deps:
       - task: dependencies
     cmds:
       - lefthook install
@@ -41,7 +41,7 @@ tasks:
     cmds:
       - |
         nix --extra-experimental-features nix-command --extra-experimental-features flakes develop
-  
+
   nix-docker:
     desc: Enter a docker container with nix.
     cmds:
@@ -62,35 +62,40 @@ tasks:
 
   test:
     desc: Run the project tests using ctest
+    Usage: task test -- [<test_name_regex>]
     cmds:
-      - | 
-        ctest --test-dir {{.BUILD_DIR}} --output-on-failure {{.CLI_ARGS}}
+      - |
+        TEST_NAME_REGEX="";
+        if [ -n "{{.CLI_ARGS}}" ]; then
+          TEST_NAME_REGEX="-R {{.CLI_ARGS}}"
+        fi
+        ctest --test-dir {{.BUILD_DIR}} --output-on-failure $TEST_NAME_REGEX
 
   build:
-    desc: Configure and build the project. 
+    desc: Configure and build the project.
     Usage: task build -- [cli] [prod] [clean]
-    cmds: 
+    cmds:
       - |
         CLI_VAL="OFF"
         TEST_VAL="ON"
-        DEBUG_VAL="ON"
+        BUILD_TYPE="Debug"
         CLEAN="OFF"
 
         # Parse CLI_ARGS for our custom flags
         for arg in {{.CLI_ARGS}}; do
           case $arg in
             cli)  CLI_VAL="ON" ;;
-            prod) TEST_VAL="OFF"; DEBUG_VAL="OFF" ;;
+            prod) TEST_VAL="OFF"; BUILD_TYPE="Release" ;;
             clean) CLEAN="ON" ;;
           esac
         done
 
-        if [ "$CLEAN" = "ON" ]; then 
+        if [ "$CLEAN" = "ON" ]; then
           rm -fr build .cache;
         fi
-      
+
         cmake -S . -B {{.BUILD_DIR}} \
-            -DCMAKE_BUILD_TYPE=${DEBUG_VAL} \
+            -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DBUILD_CLI=${CLI_VAL} \
             -DBUILD_TESTING=${TEST_VAL}
         cmake --build {{.BUILD_DIR}} --parallel
@@ -105,7 +110,7 @@ tasks:
   commit-msg:
     desc: Validate commit message format (used by git hooks)
     cmds:
-      - |  
+      - |
         MSG_FILE="{{.CLI_ARGS}}"
         [ -f "$MSG_FILE" ] || { echo "Usage: task commit-msg -- <file>"; exit 1; }
         TITLE=$(head -n1 "$MSG_FILE")
@@ -120,7 +125,11 @@ tasks:
     parallel: true
     deps:
       - task: _format_action
-        vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR", OPTS: "--dry-run --Werror" }
+        vars:
+          {
+            CMD: "git diff --name-only --cached --diff-filter=ACMR",
+            OPTS: "--dry-run --Werror",
+          }
       - task: _header_action
         vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR" }
       - task: _typo_action
@@ -130,9 +139,17 @@ tasks:
     desc: Fix staged files
     deps:
       - task: _format_action
-        vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR", OPTS: "-i" }
+        vars:
+          {
+            CMD: "git diff --name-only --cached --diff-filter=ACMR",
+            OPTS: "-i",
+          }
       - task: _typo_action
-        vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR", TYPO_OPTS: "-w" }
+        vars:
+          {
+            CMD: "git diff --name-only --cached --diff-filter=ACMR",
+            TYPO_OPTS: "-w",
+          }
 
   lint-all:
     desc: Lint all tracked files

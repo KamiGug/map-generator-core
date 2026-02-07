@@ -6,22 +6,28 @@
     flake-utils.url = "flake-utils";
   };
 
-  outputs = { nixpkgs, flake-utils, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let pkgs = import nixpkgs { inherit system; };
+  outputs = {
+    nixpkgs,
+    flake-utils,
+    ...
+  }:
+    flake-utils.lib.eachDefaultSystem (
+      system: let
+        pkgs = import nixpkgs {inherit system;};
       in {
         devShells.default = pkgs.mkShell {
           packages = with pkgs; [
             cmake
             gnumake
             gdb
-            
+
             clang
             cppcheck
 
             lefthook
             go-task
             typos
+            python3
           ];
 
           shellHook = ''
@@ -33,4 +39,3 @@
       }
     );
 }
-
