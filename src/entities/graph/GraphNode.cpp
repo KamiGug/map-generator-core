@@ -1,23 +1,27 @@
 #include "GraphNode.h"
 
 #include <algorithm>
+#include <memory>
 
 #include "entities/graph/GraphPath.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
-GraphNode::GraphNode(Biome* biome) { this->biome = biome; }
-const std::vector<std::shared_ptr<GraphPath>> GraphNode::getPaths() const { return this->paths; }
+GraphNode::GraphNode(std::shared_ptr<Biome> biome) { this->biome = biome; }
 
-void GraphNode::addPath(std::shared_ptr<GraphPath> path) {
-    if (std::find(paths.begin(), paths.end(), path) != paths.end()) {
-        // TODO: consider throwing
-        return;
-    }
+void GraphNode::addPath(std::shared_ptr<GraphPath> path, bool validate) {
     if (path->isFrom(this)) {
-        paths.push_back(path);
+        if (!validate || std::find(pathsFrom.begin(), pathsFrom.end(), path) == pathsFrom.end()) {
+            pathsFrom.push_back(path);
+        }
+        // TODO: consider throwing on else;
     }
-    // TODO: consider throwing on else
+    if (path->isTo(this)) {
+        if (!validate || std::find(pathsTo.begin(), pathsTo.end(), path) == pathsTo.end()) {
+            pathsTo.push_back(path);
+        }
+        // TODO: consider throwing on else;
+    }
 }
 
 bool operator==(const GraphNode& lhs, const GraphNode& rhs) {

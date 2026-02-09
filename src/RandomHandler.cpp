@@ -27,7 +27,7 @@ RandomHandler* RandomHandler::setSeed(int seed) {
     this->engine->seed(seed);
     return this;
 }
-int RandomHandler::getSeed() { return this->seed; };
+int RandomHandler::getSeed() const { return this->seed; };
 
 RandomHandler* RandomHandler::instance = nullptr;
 

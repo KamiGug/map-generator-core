@@ -50,6 +50,9 @@ class GraphPath {
         return false;
     }
 
+    inline const std::shared_ptr<GraphNode> getFrom() const { return this->from.lock(); }
+    inline const std::shared_ptr<GraphNode> getTo() const { return this->to.lock(); }
+
    private:
     std::unique_ptr<GraphPathOptions> options;
     std::weak_ptr<GraphNode> from;

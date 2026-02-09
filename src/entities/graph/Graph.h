@@ -15,9 +15,12 @@ class GraphPath;
 // to be useful the graph needs to be connected and acyclic
 class Graph {
    public:
-    Graph(bool autoValidate = true);
-
-    // ~Graph();
+    Graph(bool autoValidate = true, bool throwOnFailedExplicitValidation = false,
+          bool throwOnFailedAutoValidation = false) {
+        this->autoValidate = autoValidate;
+        this->throwOnFailedExplicitValidation = throwOnFailedExplicitValidation;
+        this->throwOnFailedAutoValidation = throwOnFailedAutoValidation;
+    }
 
     bool addNode(std::shared_ptr<GraphNode> node, std::shared_ptr<GraphNode> parent = nullptr,
                  std::unique_ptr<GraphPathOptions> pathOptions = nullptr,
@@ -31,12 +34,24 @@ class Graph {
 
     const std::vector<std::shared_ptr<GraphPath>>& getPaths() const;
 
+    inline const Graph* setAutoValidate(bool val) {
+        this->autoValidate = val;
+        return this;
+    }
+
     bool validate();
 
+    bool autoValidate;
+    bool throwOnFailedExplicitValidation;
+    bool throwOnFailedAutoValidation;
+
    private:
+    void _validate();
+    void _validateConnected();
+    void _validateAcyclic();
+    bool handleAutoValidation(std::optional<bool> validate);
     std::vector<std::shared_ptr<GraphNode>> nodes;
     std::vector<std::shared_ptr<GraphPath>> paths;
-    bool autoValidate;
 };
 
 bool operator==(const Graph& lhs, const Graph& rhs);

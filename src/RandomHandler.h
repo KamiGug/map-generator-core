@@ -2,10 +2,7 @@
 #define MAP_GEN_LIB_CORE_RANDOM_HANDLER_H
 
 #include <concepts>
-#include <cstddef>
 #include <random>
-
-#include "entities/containers/Vec.h"
 
 namespace MAP_GEN_LIB_NAMESPACE {
 class RandomHandler {
@@ -14,10 +11,10 @@ class RandomHandler {
     static RandomHandler* get(int seed);
 
     RandomHandler* setSeed(int seed);
-    int getSeed();
+    int getSeed() const;
 
     template <std::integral T>
-    T getRand(T min = 0, T max = 0) {
+    T getRand(T min = 0, T max = 0) const {
         if (min == max) return min;
         if (min > max) swap(min, max);
         std::uniform_int_distribution<T> dist(min, max);
@@ -25,7 +22,7 @@ class RandomHandler {
     }
 
     template <std::floating_point T>
-    T getRand(T min = 0, T max = 0) {
+    T getRand(T min = 0, T max = 0) const {
         if (min == max) return min;
         if (min > max) swap(min, max);
         std::uniform_real_distribution<T> dist(min, max);

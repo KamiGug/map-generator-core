@@ -1,13 +1,12 @@
 #ifndef MAP_GEN_LIB_EXCEPTIONS_BAD_ARGS_H
 #define MAP_GEN_LIB_EXCEPTIONS_BAD_ARGS_H
 
-#include <stdexcept>
-#include <string>
+#include "MapGeneratorLibraryException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Exceptions {
-class BadArgumentsException : public std::runtime_error {
+class BadArgumentsException : public MapGeneratorLibraryException {
    public:
-    BadArgumentsException(std::string msg) : std::runtime_error(msg) {}
+    BadArgumentsException(std::string msg) : MapGeneratorLibraryException(msg) {}
 };
 }  // namespace MAP_GEN_LIB_NAMESPACE::Exceptions
 

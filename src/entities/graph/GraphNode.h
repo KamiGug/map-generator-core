@@ -11,17 +11,16 @@ namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
 class GraphNode {
    public:
-    GraphNode(Biome* biome);
-    inline ~GraphNode() {
-        if (biome != nullptr) delete biome;
-    }
-    const std::vector<std::shared_ptr<GraphPath>> getPaths() const;
-    const Biome* getBiome() const { return this->biome; };
-    void addPath(std::shared_ptr<GraphPath> path);
+    GraphNode(std::shared_ptr<Biome> biome);
+    inline const std::vector<std::shared_ptr<GraphPath>>& getPathsFrom() const { return pathsFrom; }
+    inline const std::vector<std::shared_ptr<GraphPath>>& getPathsTo() const { return pathsTo; }
+    const std::shared_ptr<Biome> getBiome() const { return this->biome; };
+    void addPath(std::shared_ptr<GraphPath> path, bool validate = true);
 
    private:
-    Biome* biome = nullptr;
-    std::vector<std::shared_ptr<GraphPath>> paths;
+    std::shared_ptr<Biome> biome;
+    std::vector<std::shared_ptr<GraphPath>> pathsFrom;
+    std::vector<std::shared_ptr<GraphPath>> pathsTo;
 };
 
 bool operator==(const GraphNode& lhs, const GraphNode& rhs);
