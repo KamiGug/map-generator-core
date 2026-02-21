@@ -22,12 +22,13 @@
             gdb
 
             clang
-            cppcheck
+            commitlint-rs
 
             lefthook
             go-task
             typos
             python3
+            gcovr
           ];
 
           shellHook = ''

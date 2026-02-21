@@ -31,7 +31,7 @@ tasks:
     desc: Check if all the dependencies are present.
     cmds:
       - |
-        tools="lefthook typos clang-format cmake make"
+        tools="lefthook typos clang-format gcovr cmake make"
         for tool in $tools; do
             command -v $tool >/dev/null || echo "missing $tool"
         done;
@@ -71,6 +71,11 @@ tasks:
         fi
         ctest --test-dir {{.BUILD_DIR}} --output-on-failure $TEST_NAME_REGEX
 
+        if command -v gcovr; then
+          echo -e "\n--- Code Coverage Summary ---"
+            gcovr -r . --filter 'src/.*' -s --print-summary
+        fi
+
   build:
     desc: Configure and build the project.
     Usage: task build -- [cli] [prod] [clean]
@@ -107,18 +112,10 @@ tasks:
     cmds:
       - "{{.BUILD_DIR}}/{{.EXE_NAME}} {{.CLI_ARGS}}"
 
-  commit-msg:
-    desc: Validate commit message format (used by git hooks)
+  debug:
+    desc: Run cli debugger
     cmds:
-      - |
-        MSG_FILE="{{.CLI_ARGS}}"
-        [ -f "$MSG_FILE" ] || { echo "Usage: task commit-msg -- <file>"; exit 1; }
-        TITLE=$(head -n1 "$MSG_FILE")
-        [[ ${#TITLE} -le 100 ]] || { echo "Title too long"; exit 1; }
-        echo "$TITLE" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore)(\(.*\))?(!)?: .+$' || {
-          echo "Invalid format. Expected: type(scope): message"
-          exit 1
-        }
+      - "ASAN_OPTIONS=abort_on_error=1 gdb {{.BUILD_DIR}}/MapGenerator_tests "
 
   lint:
     desc: Lint staged files
@@ -134,6 +131,8 @@ tasks:
         vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR" }
       - task: _typo_action
         vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR" }
+      # - task: _tidy_action
+      #   vars: { CMD: "git diff --name-only --cached --diff-filter=ACMR" }
 
   lint-fix:
     desc: Fix staged files
@@ -150,6 +149,12 @@ tasks:
             CMD: "git diff --name-only --cached --diff-filter=ACMR",
             TYPO_OPTS: "-w",
           }
+      # - task: _tidy_action
+      #   vars:
+      #     {
+      #       CMD: "git diff --name-only --cached --diff-filter=ACMR",
+      #       TIDY_OPTS: "--fix --fix-errors",
+      #     }
 
   lint-all:
     desc: Lint all tracked files
@@ -161,6 +166,8 @@ tasks:
         vars: { CMD: "git ls-files" }
       - task: _typo_action
         vars: { CMD: "git ls-files" }
+      # - task: _tidy_action
+      #   vars: { CMD: "git ls-files" }
 
   lint-fix-all:
     desc: Fix all tracked files
@@ -169,6 +176,12 @@ tasks:
         vars: { CMD: "git ls-files", OPTS: "-i" }
       - task: _typo_action
         vars: { CMD: "git ls-files", TYPO_OPTS: "-w" }
+      - task: _tidy_action
+        vars:
+          {
+            CMD: "git ls-files",
+            TIDY_OPTS: "--fix --fix-errors",
+          }
 
   _format_action:
     internal: true
@@ -199,3 +212,13 @@ tasks:
              echo "❌ $file: Missing #endif" && exit 1
           fi
         done
+  _tidy_action:
+    internal: true
+    cmds:
+      - |
+        files=$({{.CMD}} -- '*.cpp' '*.cc' '*.c' '*.h' '*.hpp' | tr '\n' ' ')
+        [ -z "$files" ] && exit 0
+        clang-tidy \
+          -p compile_commands.json \
+          {{.TIDY_OPTS}} \
+          $files
