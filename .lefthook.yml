@@ -8,10 +8,17 @@ pre-commit:
 pre-push:
   commands:
     test:
-      run: task -s test
+      run: |
+        msg=$(git log -1 --pretty=%s)
+        branch=$(git rev-parse --abbrev-ref HEAD)
+        scope=$(echo "$msg" | sed -nE 's/^[a-zA-Z]+\(([^)]+)\):.*/\1/p' | tr '[:upper:]' '[:lower:]')
+         if [[ "$branch" != "master" && "$scope" == "wip" ]]; then
+          exit 0
+        fi
+        echo "Running tests..."
+        task -s test
 
 commit-msg:
   commands:
     message:
       run: task -s commit-msg -- {1}
-

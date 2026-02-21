@@ -107,6 +107,11 @@ tasks:
     cmds:
       - "{{.BUILD_DIR}}/{{.EXE_NAME}} {{.CLI_ARGS}}"
 
+  debug:
+    desc: Run cli debugger
+    cmds:
+      - "ASAN_OPTIONS=abort_on_error=1 gdb {{.BUILD_DIR}}/MapGenerator_tests "
+
   commit-msg:
     desc: Validate commit message format (used by git hooks)
     cmds:
