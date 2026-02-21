@@ -4,7 +4,7 @@
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
-GMLBuilder::GMLBuilder(std::vector<std::string>& graphDefinition) { this->graphDefinition = graphDefinition; }
+GMLBuilder::GMLBuilder(std::string& graphDefinition) { this->graphDefinition = graphDefinition; }
 // TODO: implement
 Graph* GMLBuilder::build() {
     Graph* graph = new Graph();
