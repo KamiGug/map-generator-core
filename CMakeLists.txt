@@ -12,6 +12,14 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 option(BUILD_TESTING "Build the testing tree" ON)
 option(BUILD_CLI "Build the command line interface" OFF)
 
+if(PROJECT_IS_TOP_LEVEL AND BUILD_TESTING)
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        message(STATUS "Tests enabled: Adding coverage instrumentation")
+        add_compile_options(--coverage -O0 -g)
+        add_link_options(--coverage)
+    endif()
+endif()
+
 include(FetchContent)
 
 add_library(${PROJECT_NAME})
@@ -89,6 +97,7 @@ endif()
 
 if(PROJECT_IS_TOP_LEVEL AND BUILD_TESTING)
     enable_testing()
+
 
     FetchContent_Declare(
         googletest

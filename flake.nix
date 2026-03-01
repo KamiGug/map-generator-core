@@ -28,6 +28,7 @@
             go-task
             typos
             python3
+            gcovr
           ];
 
           shellHook = ''

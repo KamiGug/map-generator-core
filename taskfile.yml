@@ -31,7 +31,7 @@ tasks:
     desc: Check if all the dependencies are present.
     cmds:
       - |
-        tools="lefthook typos clang-format cmake make"
+        tools="lefthook typos clang-format cmake make gcovr"
         for tool in $tools; do
             command -v $tool >/dev/null || echo "missing $tool"
         done;
@@ -70,6 +70,11 @@ tasks:
           TEST_NAME_REGEX="-R {{.CLI_ARGS}}"
         fi
         ctest --test-dir {{.BUILD_DIR}} --output-on-failure $TEST_NAME_REGEX
+
+        if command -v gcovr; then
+          echo -e "\n--- Code Coverage Summary ---"
+            gcovr -r . --filter 'src/.*' -s --print-summary
+        fi
 
   build:
     desc: Configure and build the project.
