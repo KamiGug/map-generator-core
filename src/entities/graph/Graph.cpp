@@ -32,17 +32,17 @@ bool Graph::addPath(std::shared_ptr<GraphNode> start, std::shared_ptr<GraphNode>
 }
 
 bool Graph::handleAutoValidation(std::optional<bool> validate) {
-    bool shouldValidate = validate.value_or(this->autoValidate);
+    bool shouldValidate = validate.value_or(this->options->autoValidate);
     if (shouldValidate) {
         try {
             this->_validate();
         } catch (Exceptions::CyclicGraphException e) {
-            if (this->throwOnFailedAutoValidation)
+            if (this->options->throwOnFailedAutoValidation)
                 throw e;
             else
                 return false;
         } catch (Exceptions::NotConnectedGraphException e) {
-            if (this->throwOnFailedAutoValidation)
+            if (this->options->throwOnFailedAutoValidation)
                 throw e;
             else
                 return false;
@@ -57,12 +57,12 @@ bool Graph::validate() {
     try {
         _validate();
     } catch (Exceptions::CyclicGraphException e) {
-        if (this->throwOnFailedAutoValidation)
+        if (this->options->throwOnFailedExplicitValidation)
             throw e;
         else
             return false;
     } catch (Exceptions::NotConnectedGraphException e) {
-        if (this->throwOnFailedAutoValidation)
+        if (this->options->throwOnFailedExplicitValidation)
             throw e;
         else
             return false;

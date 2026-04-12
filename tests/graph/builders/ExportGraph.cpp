@@ -60,6 +60,4 @@ TEST(GraphExport, ExportSinglePath) {
         << "Correct node count";
     ASSERT_EQ(hlp::StringHelper::countSubstring<uint8_t>(result, "edge"), graph->getPaths().size())
         << "Correct path count";
-    std::cout << result;
-    FAIL();
 }

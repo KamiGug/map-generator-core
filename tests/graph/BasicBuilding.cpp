@@ -6,6 +6,7 @@
 #include "entities/BiomeOptions.h"
 #include "entities/graph/Graph.h"
 #include "entities/graph/GraphNode.h"
+#include "entities/graph/GraphOptions.h"
 #include "entities/graph/GraphPathOptions.h"
 
 namespace ent = MAP_GEN_LIB_NAMESPACE::Entities;
@@ -46,7 +47,9 @@ TEST(Graph, AddNodeWithParent) {
 }
 
 TEST(Graph, TwoSeparateNodes) {
-    std::unique_ptr<ent::Graph> graph = std::unique_ptr<ent::Graph>(new ent::Graph(false));
+    std::unique_ptr<ent::GraphOptions> options = std::make_unique<ent::GraphOptions>();
+    options->autoValidate = false;
+    std::unique_ptr<ent::Graph> graph = std::unique_ptr<ent::Graph>(new ent::Graph(std::move(options)));
 
     auto startNode = std::make_shared<ent::GraphNode>(std::make_shared<ent::Biome>(
         std::unique_ptr<ent::BiomeOptions>((new ent::BiomeOptions())->setPathToTileMap("some path"))));

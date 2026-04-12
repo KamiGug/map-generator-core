@@ -21,7 +21,7 @@ void GMLExporter::write(Graph& graph, std::ostream& out) {
     // write any graph related settings, like:
     // out << GMLExporter::indent(1) + "seed " + std::to_string(MAP_GEN_LIB_NAMESPACE::RandomHandler::get()->getSeed())
     // + "\n";
-    out << GMLExporter::indent(1) << "autoValidate " << (graph.autoValidate ? "1" : "0") << "\n";
+    out << GMLExporter::indent(1) << "autoValidate " << (graph.options->autoValidate ? "1" : "0") << "\n";
 
     auto nodes = graph.getNodes();
     auto nodeCount = nodes.size();

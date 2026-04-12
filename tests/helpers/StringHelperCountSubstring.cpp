@@ -1,21 +1,21 @@
-#include "helpers/StringHelper.h"
-
 #include <gtest/gtest.h>
 
 #include <cstdint>
 #include <vector>
 
+#include "helpers/StringHelper.h"
+
 // namespace ent = MAP_GEN_LIB_NAMESPACE::Entities;
 namespace hlp = MAP_GEN_LIB_NAMESPACE::Helpers;
 
-TEST(StringHelper, SingleFound) {
+TEST(StringHelperCountSubstring, SingleFound) {
     std::string haystack = "the quick brown fox jumps over the lazy dog";
     std::string needle = "fox";
 
     ASSERT_EQ(hlp::StringHelper::countSubstring<uint8_t>(haystack, needle), 1) << "One substring found";
 }
 
-TEST(StringHelper, NoneFound) {
+TEST(StringHelperCountSubstring, NoneFound) {
     std::string haystack =
         "Julius hurried, strolling through the bustling crowds. Brutus hurried behind him trying to keep up. The "
         "people who comprised the crowd were the multitude of beings occupying the bustling city of Rome. From street "
@@ -40,14 +40,14 @@ TEST(StringHelper, NoneFound) {
     ASSERT_EQ(hlp::StringHelper::countSubstring<uint8_t>(haystack, needle), 0) << "No substrings found";
 }
 
-TEST(StringHelper, ManyFound) {
+TEST(StringHelperCountSubstring, ManyFound) {
     std::string haystack = "ababab abab";
     std::string needle = "ab";
 
     ASSERT_EQ(hlp::StringHelper::countSubstring<uint8_t>(haystack, needle), 5) << "Five substrings found";
 }
 
-TEST(StringHelper, AllFound) {
+TEST(StringHelperCountSubstring, AllFound) {
     std::string haystack = "pppppppppppppppppppppppppppppppp";
     std::string needle = "p";
 
@@ -55,21 +55,21 @@ TEST(StringHelper, AllFound) {
         << haystack.size() << " substrings found";
 }
 
-TEST(StringHelper, EmptyNeedle) {
+TEST(StringHelperCountSubstring, EmptyNeedle) {
     std::string haystack = "some string";
     std::string needle = "";
 
     ASSERT_EQ(hlp::StringHelper::countSubstring<uint8_t>(haystack, needle), 0) << "No substrings found";
 }
 
-TEST(StringHelper, EmptyHaystack) {
+TEST(StringHelperCountSubstring, EmptyHaystack) {
     std::string haystack = "";
     std::string needle = "some string";
 
     ASSERT_EQ(hlp::StringHelper::countSubstring<uint8_t>(haystack, needle), 0) << "No substrings found";
 }
 
-TEST(StringHelper, PregeneratedTable) {
+TEST(StringHelperCountSubstring, PregeneratedTable) {
     std::string haystack = "the quick brown fox jumps over the lazy dog";
     std::string needle = "the";
     std::vector<int_fast64_t> KMPTable = hlp::StringHelper::buildKMPTable(needle);

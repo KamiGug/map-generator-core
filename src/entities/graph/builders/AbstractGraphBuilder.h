@@ -4,12 +4,14 @@
 #include <memory>
 
 #include "entities/graph/Graph.h"
+#include "entities/graph/GraphOptions.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
 class AbstractGraphBuilder {
    public:
-    virtual std::unique_ptr<Graph> build() = 0;
+    virtual std::unique_ptr<Graph> build(std::unique_ptr<GraphOptions> = nullptr) = 0;
+    virtual ~AbstractGraphBuilder() = default;
 };
 
 }  // namespace MAP_GEN_LIB_NAMESPACE::Entities

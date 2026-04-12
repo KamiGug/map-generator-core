@@ -5,6 +5,7 @@
 #include <optional>
 #include <vector>
 
+#include "GraphOptions.h"
 #include "entities/graph/GraphNode.h"
 #include "entities/graph/GraphPathOptions.h"
 
@@ -15,12 +16,9 @@ class GraphPath;
 // to be useful the graph needs to be connected and acyclic
 class Graph {
    public:
-    Graph(bool autoValidate = true, bool throwOnFailedExplicitValidation = false,
-          bool throwOnFailedAutoValidation = false) {
-        this->autoValidate = autoValidate;
-        this->throwOnFailedExplicitValidation = throwOnFailedExplicitValidation;
-        this->throwOnFailedAutoValidation = throwOnFailedAutoValidation;
-    }
+    Graph(std::unique_ptr<GraphOptions> options) { this->options = std::move(options); }
+
+    Graph() : Graph(std::make_unique<GraphOptions>()) {}
 
     bool addNode(std::shared_ptr<GraphNode> node, std::shared_ptr<GraphNode> parent = nullptr,
                  std::unique_ptr<GraphPathOptions> pathOptions = nullptr,
@@ -35,15 +33,12 @@ class Graph {
     const std::vector<std::shared_ptr<GraphPath>>& getPaths() const;
 
     inline const Graph* setAutoValidate(bool val) {
-        this->autoValidate = val;
+        this->options->autoValidate = val;
         return this;
     }
 
+    std::unique_ptr<GraphOptions> options;
     bool validate();
-
-    bool autoValidate;
-    bool throwOnFailedExplicitValidation;
-    bool throwOnFailedAutoValidation;
 
    private:
     void _validate();
