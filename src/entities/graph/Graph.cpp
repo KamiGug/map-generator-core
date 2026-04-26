@@ -8,8 +8,8 @@
 #include "entities/graph/GraphNode.h"
 #include "entities/graph/GraphPath.h"
 #include "entities/graph/GraphPathOptions.h"
-#include "exceptions/CyclicGraphException.h"
-#include "exceptions/NotConnectedGraphException.h"
+#include "exceptions/graph/CyclicGraphException.h"
+#include "exceptions/graph/NotConnectedGraphException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 bool Graph::addNode(std::shared_ptr<GraphNode> node, std::shared_ptr<GraphNode> parent,

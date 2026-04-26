@@ -4,7 +4,7 @@
 
 #include "entities/graph/GraphNode.h"
 #include "entities/graph/GraphPathOptions.h"
-#include "exceptions/InvalidGraphNodeException.h"
+#include "exceptions/graph/InvalidGraphNodeException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 

@@ -5,7 +5,7 @@
 #include <memory>
 
 #include "entities/BiomeOptions.h"
-#include "exceptions/InvalidBiomeOptionsException.h"
+#include "exceptions/graph/InvalidBiomeOptionsException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 

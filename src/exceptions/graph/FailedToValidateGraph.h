@@ -1,7 +1,7 @@
 #ifndef MAP_GEN_LIB_EXCEPTIONS_FAILED_TO_VALIDATE_GRAPH_H
 #define MAP_GEN_LIB_EXCEPTIONS_FAILED_TO_VALIDATE_GRAPH_H
 
-#include "MapGeneratorLibraryException.h"
+#include "exceptions/MapGeneratorLibraryException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Exceptions {
 class FailedToValidateGraph : public MapGeneratorLibraryException {

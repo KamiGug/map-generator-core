@@ -3,7 +3,7 @@
 
 #include <string>
 
-#include "exceptions/InvalidBiomeOptionsException.h"
+#include "exceptions/graph/InvalidBiomeOptionsException.h"
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
 class BiomeOptions {

@@ -8,7 +8,7 @@
 #include "entities/Biome.h"
 #include "entities/graph/Graph.h"
 #include "entities/graph/GraphNode.h"
-#include "exceptions/InvalidGraphException.h"
+#include "exceptions/graph/InvalidGraphException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 

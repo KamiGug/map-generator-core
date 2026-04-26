@@ -1,7 +1,7 @@
 #ifndef MAP_GEN_LIB_EXCEPTIONS_INVALID_BIOME_OPTIONS_H
 #define MAP_GEN_LIB_EXCEPTIONS_INVALID_BIOME_OPTIONS_H
 
-#include "BadArgumentsException.h"
+#include "exceptions/BadArgumentsException.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Exceptions {
 class InvalidBiomeOptionsException : public BadArgumentsException {

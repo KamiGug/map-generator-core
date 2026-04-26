@@ -8,7 +8,7 @@
 #include "entities/graph/Graph.h"
 #include "entities/graph/GraphNode.h"
 #include "entities/graph/GraphPathOptions.h"
-#include "exceptions/InvalidGraphNodeException.h"
+#include "exceptions/graph/InvalidGraphNodeException.h"
 
 namespace ent = MAP_GEN_LIB_NAMESPACE::Entities;
 
