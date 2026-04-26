@@ -26,6 +26,7 @@
 
             lefthook
             go-task
+            ripgrep
             typos
             python3
             gcovr

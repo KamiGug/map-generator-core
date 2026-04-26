@@ -4,6 +4,10 @@ pre-commit:
   commands:
     check:
       run: task -s lint
+    todos:
+      run: |
+        task -s todos
+        git add todos.txt
 
 pre-push:
   commands:

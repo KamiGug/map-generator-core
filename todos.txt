@@ -1,0 +1,22 @@
+src/entities/BiomeOptions.cpp
+  9:        // TODO: consider throwing when setting the id if it was already set
+
+src/entities/containers/Space2D.cpp
+  36:// TODO: remove
+
+src/entities/graph/builders/GenerateTreeBuilder.cpp
+  10:// TODO: implement
+
+src/entities/graph/GraphNode.cpp
+  17:        // TODO: consider throwing on else;
+  23:        // TODO: consider throwing on else;
+  29:    // TODO: decide whether to check paths
+
+src/entities/graph/GraphPathOptions.h
+  32:    // TODO: reimplement this
+
+tests/graph/builders/GMLTokenizerBuilder.cpp
+  11:// TODO: Improve this test suite
+
+tests/graph/GraphProgrammaticRoundAbout.cpp
+  11:// TODO: actually make this a round about
