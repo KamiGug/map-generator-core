@@ -6,7 +6,7 @@
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
-struct Space2DInitOptions {
+struct Space2DOptions {
    public:
     std::size_t width = 100;
     std::size_t height = 100;

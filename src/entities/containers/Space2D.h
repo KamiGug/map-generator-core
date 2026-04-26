@@ -2,25 +2,23 @@
 #define MAP_GEN_LIB_ENTITIES_SPACE_2D_H
 
 #include <cstddef>
-#include <cstdint>
+#include <memory>
 
-#include "Space2DInitOptions.h"
+#include "Cell.h"
+#include "Space2DOptions.h"
 
 namespace MAP_GEN_LIB_NAMESPACE::Entities {
 
 class Space2D {
    public:
-    Space2D(Space2DInitOptions* options = nullptr);
+    Space2D(std::unique_ptr<Space2DOptions> options = nullptr);
     ~Space2D();
 
-    uint64_t get(size_t x, size_t y);
-
-    void set(size_t x, size_t y, uint64_t value);
+    std::shared_ptr<Cell> get(size_t x, size_t y);
 
    private:
-    uint64_t** space;
-    size_t width;
-    size_t height;
+    std::shared_ptr<Cell>** space;
+    std::unique_ptr<Space2DOptions> options;
 };
 
 }  // namespace MAP_GEN_LIB_NAMESPACE::Entities
