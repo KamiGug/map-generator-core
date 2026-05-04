@@ -99,10 +99,16 @@ tasks:
           rm -fr build .cache;
         fi
 
+        ADDITIONAL_FLAGS="";
+        if [ "$BUILD_TYPE" = "Debug" ]; then
+          ADDITIONAL_FLAGS="-U_FORTIFY_SOURCE";
+        fi
+
         cmake -S . -B {{.BUILD_DIR}} \
             -DCMAKE_BUILD_TYPE=${BUILD_TYPE} \
             -DBUILD_CLI=${CLI_VAL} \
-            -DBUILD_TESTING=${TEST_VAL}
+            -DBUILD_TESTING=${TEST_VAL} \
+            ${ADDITIONAL_FLAGS};
         cmake --build {{.BUILD_DIR}} --parallel
         rm -f compile_commands.json
         cp {{.BUILD_DIR}}/compile_commands.json compile_commands.json
