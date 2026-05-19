@@ -3,7 +3,6 @@
 #include <cstdlib>
 
 #include "helpers/RandomHandler.h"
-#include "WorldGenerator.h"
 
 namespace MAP_GEN_LIB_NAMESPACE {
 
@@ -22,11 +21,6 @@ int Options::getSeed() {
     return this->seed.value();
 }
 
-Options* Options::setGenerator(WorldGenerator* generator) {
-    this->generator = generator;
-    return this;
-}
-WorldGenerator* Options::getGenerator() { return this->generator; }
 Options* Options::setGraphBuilder(Entities::AbstractGraphBuilder* graphBuilder) {
     this->graphBuilder = graphBuilder;
     return this;

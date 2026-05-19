@@ -9,16 +9,7 @@ namespace MAP_GEN_LIB_NAMESPACE {
 
 class WorldGenerator {
    public:
-    inline WorldGenerator() {
-        auto _options = std::unique_ptr<Options>();
-        WorldGenerator(std::move(_options));
-    }
-
-    inline WorldGenerator(Options*& options) {
-        auto _options = std::unique_ptr<Options>(options);
-        options = nullptr;
-        WorldGenerator(std::move(_options));
-    }
+    inline WorldGenerator() : WorldGenerator(std::make_unique<Options>()) {}
 
     WorldGenerator(std::unique_ptr<Options> options);
 

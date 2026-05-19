@@ -14,15 +14,11 @@ class Options {
     Options* setSeed(int seed);
     int getSeed();
 
-    Options* setGenerator(WorldGenerator* generator);
-    WorldGenerator* getGenerator();
-
     Options* setGraphBuilder(Entities::AbstractGraphBuilder* graphBuilder);
     Entities::AbstractGraphBuilder* getGraphBuilder();
 
    private:
     std::optional<int> seed;
-    WorldGenerator* generator = nullptr;
     Entities::AbstractGraphBuilder* graphBuilder = nullptr;
 };
 }  // namespace MAP_GEN_LIB_NAMESPACE

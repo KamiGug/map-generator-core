@@ -16,18 +16,14 @@ class Biome {
 
     inline Biome(std::unique_ptr<BiomeOptions> options) {
         if (options == nullptr) throw Exceptions::InvalidBiomeOptionsException("Missing options exception");
-        this->id = Biome::getNextId();
         this->options = std::move(options);
     }
 
     inline const BiomeOptions& getOptions() const { return *(this->options); }
 
-    inline uint16_t getId() const { return id; }
+    inline uint16_t getId() const { return this->options->getId(); }
 
    private:
-    static uint16_t nextId;
-    inline static uint16_t getNextId() { return Biome::nextId++; }
-    uint16_t id;
     std::unique_ptr<BiomeOptions> options;
 
     // static std::unordered_map<uint16_t, std::weak_ptr<Biome>> BiomeMap;

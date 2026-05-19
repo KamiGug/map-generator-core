@@ -1,5 +1,5 @@
 src/entities/BiomeOptions.cpp
-  9:        // TODO: consider throwing when setting the id if it was already set
+  9:    // TODO: consider throwing when setting the id if it was already set
 
 src/entities/containers/Space2D.cpp
   36:// TODO: remove

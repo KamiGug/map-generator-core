@@ -11,7 +11,6 @@ WorldGenerator::WorldGenerator(std::unique_ptr<Options> options) {
     RandomHandler::get(options->getSeed());
 
     this->options = std::move(options);
-    this->options->setGenerator(this);
 }
 
 }  // namespace MAP_GEN_LIB_NAMESPACE
