@@ -15,10 +15,10 @@ class Space2D {
     ~Space2D();
 
     std::shared_ptr<Cell> get(size_t x, size_t y);
+    std::unique_ptr<Space2DOptions> options;
 
    private:
     std::shared_ptr<Cell>** space;
-    std::unique_ptr<Space2DOptions> options;
 };
 
 }  // namespace MAP_GEN_LIB_NAMESPACE::Entities
