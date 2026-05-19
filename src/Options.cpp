@@ -2,7 +2,7 @@
 
 #include <cstdlib>
 
-#include "RandomHandler.h"
+#include "helpers/RandomHandler.h"
 #include "WorldGenerator.h"
 
 namespace MAP_GEN_LIB_NAMESPACE {

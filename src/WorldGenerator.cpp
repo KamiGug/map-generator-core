@@ -3,7 +3,7 @@
 #include <memory>
 
 #include "Options.h"
-#include "RandomHandler.h"
+#include "helpers/RandomHandler.h"
 
 namespace MAP_GEN_LIB_NAMESPACE {
 
