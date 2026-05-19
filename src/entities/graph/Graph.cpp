@@ -36,12 +36,12 @@ bool Graph::handleAutoValidation(std::optional<bool> validate) {
     if (shouldValidate) {
         try {
             this->_validate();
-        } catch (Exceptions::CyclicGraphException e) {
+        } catch (const Exceptions::CyclicGraphException& e) {
             if (this->options->throwOnFailedAutoValidation)
                 throw e;
             else
                 return false;
-        } catch (Exceptions::NotConnectedGraphException e) {
+        } catch (const Exceptions::NotConnectedGraphException& e) {
             if (this->options->throwOnFailedAutoValidation)
                 throw e;
             else
@@ -56,12 +56,12 @@ bool Graph::handleAutoValidation(std::optional<bool> validate) {
 bool Graph::validate() {
     try {
         _validate();
-    } catch (Exceptions::CyclicGraphException e) {
+    } catch (const Exceptions::CyclicGraphException& e) {
         if (this->options->throwOnFailedExplicitValidation)
             throw e;
         else
             return false;
-    } catch (Exceptions::NotConnectedGraphException e) {
+    } catch (const Exceptions::NotConnectedGraphException& e) {
         if (this->options->throwOnFailedExplicitValidation)
             throw e;
         else
