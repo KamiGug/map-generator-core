@@ -15,6 +15,11 @@ src/entities/graph/GraphNode.cpp
 src/entities/graph/GraphPathOptions.h
   32:    // TODO: reimplement this
 
+src/steps/graphMapping/ForceDirectedLayout/ForceDirectedLayoutStep.cpp
+  103:            // TODO: throw
+  45:        // TODO: rewrite this - it makes no sense
+  81:            // TODO: implement
+
 tests/graph/builders/GMLTokenizerBuilder.cpp
   11:// TODO: Improve this test suite
 
